@@ -1,3 +1,8 @@
+MediaMosa 3.2.0.3 (build 1847)
+------------------------------
+- Oai item count ticket fix (See ticket #305).
+- The /asset [GET] REST call cause a PDOException ticket fix (See ticket #304).
+
 MediaMosa 3.2.0.2 (build 1844)
 ------------------------------
 - Transcode job blocks transcodings fix (See ticket #300).

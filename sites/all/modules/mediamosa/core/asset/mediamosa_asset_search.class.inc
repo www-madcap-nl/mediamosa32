@@ -514,7 +514,7 @@ class mediamosa_asset_search {
         $query = mediamosa_db_query::query_select($a_query);
         // Join check
         // Put back the joins, if they are (one of them) necessary
-        if (stripos($query, 'mf.') !== FALSE || stripos($query, 'acl_ms.') !== FALSE || stripos($query, 'asset_coll.') !== FALSE || stripos($query, ' c.') !== FALSE) {
+        if (stripos($query, 'sort.') !== FALSE || stripos($query, 'mf.') !== FALSE || stripos($query, 'acl_ms.') !== FALSE || stripos($query, 'asset_coll.') !== FALSE || stripos($query, ' c.') !== FALSE) {
           $a_query[mediamosa_db_query::A_JOIN] = $tmp_a_query[mediamosa_db_query::A_JOIN];
           $query = mediamosa_db_query::query_select($a_query);
         }
@@ -537,8 +537,15 @@ class mediamosa_asset_search {
           ));
 
           // Harvesting the data
-          if (mediamosa_unicode::substr($d_ordby, 0, 5) == 'sort.') {
-            $d_ordby = 'a.' . mediamosa_unicode::substr($d_ordby, 5);
+          $d_ordby_lenght = mediamosa_unicode::strlen('sort.');
+          if (mediamosa_unicode::substr($d_ordby, 0, $d_ordby_lenght) == 'sort.') {
+            $d_ordby_column = mediamosa_unicode::substr($d_ordby, $d_ordby_lenght);
+            if (in_array($d_ordby_column, array(mediamosa_asset_db::ID, mediamosa_asset_db::VIDEOTIMESTAMPMODIFIED))) {
+              $d_ordby = 'a.' . $d_ordby_column;
+            }
+            else {
+              $d_ordby = NULL;
+            }
           }
           $result = mediamosa_db::db_query('SELECT DISTINCT a.asset_id FROM {' . $table_name . '} AS a' . ($d_ordby ? ' ORDER BY ' . $d_ordby : '') . ($d_limit ? ($d_offset ? ' LIMIT ' . $d_offset . ',' . $d_limit : ' LIMIT ' . $d_limit) : ''));
           $asset_ids = array();

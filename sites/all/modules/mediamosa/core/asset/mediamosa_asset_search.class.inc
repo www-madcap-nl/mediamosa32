@@ -547,7 +547,7 @@ class mediamosa_asset_search {
           }
 
           // How much assets we have globally
-          $i_found_rows = $calculate_total_count ? mediamosa_db::db_query('SELECT COUNT(*) FROM {' . $table_name . '}')->fetchField() : count($asset_ids);
+          $i_found_rows = $calculate_total_count ? mediamosa_db::db_query('SELECT COUNT(DISTINCT asset_id) FROM {' . $table_name . '}')->fetchField() : count($asset_ids);
         }
         catch (Exception $e) {
           // Make sure we switch back(!).
